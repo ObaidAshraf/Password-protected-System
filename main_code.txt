@@ -1,0 +1,50 @@
+#include <16F877A.h>
+#Fuses xt, NOWDT, NOLVP, brownout
+#use delay (clock=4Mhz)
+#include <lcd.c>
+#define use_portb_kbd TRUE
+#include <kbd.c>
+
+void main()
+{
+char k,n=0;
+char pass[6];
+lcd_init();
+delay_ms(10);
+kbd_init();
+delay_ms(10);
+
+lcd_gotoxy(1,1);
+lcd_putc("Enter Password:");
+lcd_gotoxy(1,2);
+
+while(1)
+{
+k=kbd_getc();
+if(k!=0 && n<6)
+{
+pass[n]=k;
+lcd_putc('*');
+delay_ms(150);
+n++;
+}
+delay_ms(1);
+if(n==6)
+{
+lcd_putc('\f');
+delay_ms(100);
+if(pass[0]=='1' && pass[1]=='2' && pass[2]=='3' && pass[3]=='4' && pass[4]=='5' && pass[5]=='6')
+{
+lcd_putc("Correct!");
+delay_ms(100);
+break;
+}
+else
+{
+lcd_putc("Incorrect!");
+delay_ms(100);
+break;
+}
+}
+}
+}
